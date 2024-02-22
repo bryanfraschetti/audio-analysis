@@ -36,5 +36,5 @@ sf.write("Reconstructions/" +
         + "_hs" + str(HOP_LENGTH)
         + "_fs" + str(F_BINS)
         + "_ntb" + str(NUM_TIME_BINS)
-        + "_sd" + str(SEGMENT_DURATION)
+        + "_sd" + str(int(1000*SEGMENT_DURATION))
         +  "_reconstructed.wav", reconstructed_audio, samplerate=SAMPLE_RATE)

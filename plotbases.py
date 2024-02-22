@@ -5,26 +5,26 @@ import librosa
 from src import cqtspec, config_env
 import os
 
-repo_root = os.path.abspath(os.path.join(__file__, "../.."))
+repo_root = os.path.abspath(os.path.join(__file__, ".."))
 env = os.path.abspath(os.path.join(repo_root, "environmentVars.ini"))
 config_env.load_ini_env(env)
 
 HOP_LENGTH = int(os.environ.get("hop_length"))
 SAMPLE_RATE = int(os.environ.get("sample_rate"))
 SEGMENT_DURATION = float(os.environ.get("segment_duration"))
-FRAME_SIZE = int(os.environ.get("frame_size"))
+F_BINS = int(os.environ.get("f_bins"))
 BINS_PER_OCTAVE = int(os.environ.get("bins_per_octave"))
 NUM_COMPONENTS = int(os.environ.get("num_components"))
 F_MIN = float(os.environ.get("f_min"))
 
 NUM_TIME_BINS = int( SEGMENT_DURATION / ( HOP_LENGTH / SAMPLE_RATE) )
-FLOATS_PER_SEGMENT = NUM_TIME_BINS * FRAME_SIZE
-FRAMES_PER_SEGMENT = int( SEGMENT_DURATION / ( HOP_LENGTH / SAMPLE_RATE) )
-FLOATS_PER_SEGMENT = NUM_TIME_BINS*FRAME_SIZE
+FLOATS_PER_SEGMENT = NUM_TIME_BINS * F_BINS
 
-model = joblib.load(repo_root + '/models/cqt_pca_model_nc' + str(NUM_COMPONENTS) #load current model
-                    + '_fs' + str(FRAME_SIZE) 
-                    + "_FPS" + str(FRAMES_PER_SEGMENT) 
+model = joblib.load('models/cqt_pca_model_nc' + str(NUM_COMPONENTS) #load current model
+                    + "_hs" + str(HOP_LENGTH)
+                    + '_fs' + str(F_BINS)
+                    + "_ntb" + str(NUM_TIME_BINS)
+                    + "_sd" + str(int(1000*SEGMENT_DURATION))
                     + ".joblib")
 components = model.components_
 # print(np.sum(model.explained_variance_ratio_[0:100]))

@@ -11,7 +11,7 @@ config_env.load_ini_env(env)
 HOP_LENGTH = int(os.environ.get("hop_length"))
 SAMPLE_RATE = int(os.environ.get("sample_rate"))
 SEGMENT_DURATION = float(os.environ.get("segment_duration"))
-F_BINS = int(os.environ.get("F_BINS"))
+F_BINS = int(os.environ.get("f_bins"))
 BINS_PER_OCTAVE = int(os.environ.get("bins_per_octave"))
 NUM_COMPONENTS = int(os.environ.get("num_components"))
 F_MIN = float(os.environ.get("f_min"))
@@ -43,6 +43,12 @@ def segment_spectrogram(truncated_spectrogram):
     segmented_spectrogram = np.array_split(truncated_spectrogram, len(truncated_spectrogram) / FLOATS_PER_SEGMENT)
     return segmented_spectrogram
 
+def normalize_segment(segment):
+    segment = segment.astype('float')
+    loudness = np.mean(segment)
+    scaled_segment = scale(segment, with_std=True)
+    return (scaled_segment, loudness)
+
 def normalize(segmented_spectrogram):
     loudnesses = []
     scaled_segments = []
@@ -50,7 +56,7 @@ def normalize(segmented_spectrogram):
         segment = segment.astype('float')
         loudness = np.mean(segment)
         loudnesses.append(loudness)
-        scaled_segment = scale(segment, with_std=False) #keep the spread/dispersion of loudness
+        scaled_segment = scale(segment, with_std=True) #keep the spread/dispersion of loudness
         scaled_segments.append(scaled_segment)
     return (scaled_segments, loudnesses)
 
