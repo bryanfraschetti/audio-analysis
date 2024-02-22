@@ -18,15 +18,15 @@ HOP_SIZE = int(FRAME_SIZE/2)
 
 
 #1. perform pca
-# pca_decomposition.generate_pca_bases(plot_bases=True, save_bases_as_audio=True)
+pca_decomposition.generate_pca_bases(plot_bases=False, save_bases_as_audio=False)
 
 
 #2. visualize bases
-spectrogram_operations.plot_pca_bases()
+# spectrogram_operations.plot_pca_bases()
 
 
 #load resource and obtain log power spectrum
-file = repo_root + "/Resources/sample.wav"
+file = repo_root + "songname.wav"
 songname = file.split("/")[-1].split(".")[0]
 song, _ = librosa.load(file)
 
@@ -56,13 +56,13 @@ phase_spectrogram = spectrogram_operations.array_to_spectrogram_shape(phase_spec
 
 
 #convert original log power spectrogram to audio
-spectrogram = librosa.stft(song, n_fft=FRAME_SIZE, hop_length=HOP_SIZE)
-original_audio = librosa.istft(spectrogram, n_fft=FRAME_SIZE, hop_length=HOP_SIZE)
-sf.write(repo_root + "/Reconstructions/" + #encode environment configuration info in file name
-        songname + "_nc" + str(NUM_COMPONENTS) 
-        + "_fs" + str(FRAME_SIZE) 
-        + "_FPS" + str(FRAMES_PER_SEGMENT) 
-        + "_istft.wav", original_audio, samplerate=SAMPLE_RATE)
+# spectrogram = librosa.stft(song, n_fft=FRAME_SIZE, hop_length=HOP_SIZE)
+# original_audio = librosa.istft(spectrogram, n_fft=FRAME_SIZE, hop_length=HOP_SIZE)
+# sf.write(repo_root + "/Reconstructions/" + #encode environment configuration info in file name
+#         songname + "_nc" + str(NUM_COMPONENTS) 
+#         + "_fs" + str(FRAME_SIZE) 
+#         + "_FPS" + str(FRAMES_PER_SEGMENT) 
+#         + "_istft.wav", original_audio, samplerate=SAMPLE_RATE)
 
 
 #reconstructed audio
